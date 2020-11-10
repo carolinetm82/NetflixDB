@@ -69,7 +69,16 @@ INNER JOIN netflix_shows as s
 ON t.title = s.title;
 
 /* Calculate the total duration of the movies on netflix_titles */
-SELECT SUM(duration) FROM netflix_titles WHERE type='Movie';
+ALTER TABLE netflix_titles  -- We have to create a new column named durnum with INT values since duration is a VARCHAR column
+ADD COLUMN durnum INT 
+GENERATED ALWAYS AS (
+CASE
+    WHEN type='Movie' AND length(duration)=6 THEN (LEFT(duration,2))
+    WHEN type='Movie' AND length(duration)=7 THEN (LEFT(duration,3))
+    WHEN type='TV Show' AND length(duration)=10 THEN (LEFT(duration,2)*10*50)
+    ELSE LEFT(duration,1)*10*50 END) STORED; -- We suppose each season of a TV show is composed of ten 50 min episodes 
+
+SELECT SUM(durnum) FROM netflix_titles WHERE type='Movie';
 
 /* Count the number of TV shows where 'ratingLevel' field is filled*/
 SELECT count(distinct s.title)
