@@ -105,5 +105,5 @@ LIMIT 100;
 
 /* Filling a empty cell with some comment in the case of “Marvel's Iron Fist” */
 UPDATE netflix_shows
-SET ratingLevel = 'This is a comment added'
+SET ratingLevel = 'Action sequences'
 WHERE title = 'Marvel\'s Iron Fist';
